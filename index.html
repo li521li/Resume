@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>李冲 · 本硕七年成就展示</title>
+<!-- 雷达图已改为原生 SVG 渲染，彻底移除外部 CDN 依赖，离线/无网也能显示 -->
+<style>
+  :root{
+    --bg:#f5f8fc; --bg2:#eaf0f9; --fg:#172033; --muted:#5a667e;
+    --card:#ffffff; --border:#e2e8f2; --accent:#4f46e5; --accent2:#7c3aed;
+    --shadow:0 12px 34px rgba(22,33,60,.08); --radius:18px;
+    --edu:#3b82f6; --proj:#8b5cf6; --award:#f59e0b; --intern:#10b981; --research:#f43f5e;
+  }
+  [data-theme="dark"]{
+    --bg:#0b1020; --bg2:#10162b; --fg:#e9edf7; --muted:#9aa6c2;
+    --card:#151c33; --border:#28324f; --accent:#818cf8; --accent2:#a78bfa;
+    --shadow:0 12px 34px rgba(0,0,0,.45);
+    --edu:#60a5fa; --proj:#a78bfa; --award:#fbbf24; --intern:#34d399; --research:#fb7185;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--fg); line-height:1.65; overflow-x:hidden;
+    transition:background .4s ease,color .4s ease;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+
+  /* progress bar */
+  #progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:100;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .12s ease}
+
+  /* nav */
+  nav{position:sticky;top:0;z-index:90;backdrop-filter:blur(14px);
+    background:color-mix(in srgb,var(--bg) 82%,transparent);
+    border-bottom:1px solid var(--border)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:58px}
+  .brand{font-weight:800;letter-spacing:.5px;font-size:17px}
+  .brand span{color:var(--accent)}
+  .nav-links{display:flex;gap:6px;align-items:center}
+  .nav-links a{padding:7px 12px;border-radius:10px;font-size:14px;color:var(--muted);transition:.2s}
+  .nav-links a:hover,.nav-links a.active{color:var(--fg);background:var(--bg2)}
+  .theme-btn{cursor:pointer;border:1px solid var(--border);background:var(--card);
+    color:var(--fg);width:38px;height:38px;border-radius:10px;font-size:16px;display:grid;place-items:center;transition:.2s}
+  .theme-btn:hover{border-color:var(--accent)}
+  .nav-toggle{display:none}
+
+  /* hero */
+  .hero{position:relative;overflow:hidden;padding:84px 0 70px;text-align:center}
+  .hero::before{content:"";position:absolute;inset:-30% -10% auto -10%;height:520px;z-index:-1;
+    background:radial-gradient(60% 60% at 30% 20%,color-mix(in srgb,var(--accent) 26%,transparent),transparent 70%),
+               radial-gradient(50% 50% at 80% 10%,color-mix(in srgb,var(--accent2) 24%,transparent),transparent 70%);
+    filter:blur(8px);animation:float 9s ease-in-out infinite}
+  @keyframes float{50%{transform:translateY(18px)}}
+  .avatar{width:104px;height:104px;border-radius:50%;margin:0 auto 22px;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
+    display:grid;place-items:center;font-size:42px;font-weight:800;
+    box-shadow:0 14px 30px color-mix(in srgb,var(--accent) 40%,transparent)}
+  .hero h1{font-size:clamp(30px,6vw,52px);font-weight:850;letter-spacing:.5px}
+  .hero .title{font-size:clamp(16px,2.6vw,21px);color:var(--accent);font-weight:700;margin:8px 0 6px}
+  .hero .tagline{color:var(--muted);font-size:15px;max-width:620px;margin:0 auto}
+  .chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:24px}
+  .chip{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;
+    background:var(--card);border:1px solid var(--border);font-size:13.5px;box-shadow:var(--shadow);transition:.2s}
+  .chip:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .chip svg{width:15px;height:15px;flex:0 0 auto;color:var(--accent)}
+
+  /* sections */
+  section{padding:62px 0;scroll-margin-top:64px}
+  .sec-head{display:flex;align-items:center;gap:13px;margin-bottom:30px}
+  .sec-head .bar{width:5px;height:26px;border-radius:4px;background:linear-gradient(var(--accent),var(--accent2))}
+  .sec-head h2{font-size:26px;font-weight:800}
+  .sec-head .en{color:var(--muted);font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+
+  /* stats */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px}
+  .stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    padding:24px 18px;text-align:center;box-shadow:var(--shadow);position:relative;overflow:hidden;transition:.25s}
+  .stat::after{content:"";position:absolute;top:0;left:0;right:0;height:3px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));transform:scaleX(0);transform-origin:left;transition:.4s}
+  .stat:hover::after{transform:scaleX(1)}
+  .stat .num{font-size:38px;font-weight:850;line-height:1;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat .label{margin-top:10px;font-size:13.5px;color:var(--muted)}
+
+  /* timeline */
+  .timeline{position:relative;margin-left:8px;padding-left:30px}
+  .timeline::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;
+    background:linear-gradient(var(--accent),var(--accent2));opacity:.4}
+  .tl-item{position:relative;margin-bottom:26px;opacity:0;transform:translateY(26px);
+    transition:opacity .6s ease,transform .6s ease}
+  .tl-item.show{opacity:1;transform:none}
+  .tl-item .dot{position:absolute;left:-30px;top:6px;width:16px;height:16px;border-radius:50%;
+    background:var(--card);border:3px solid var(--c);box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 18%,transparent);transition:.3s}
+  .tl-item.active .dot{transform:scale(1.25)}
+  .tl-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;
+    box-shadow:var(--shadow);border-left:4px solid var(--c)}
+  .tl-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+  .tl-date{font-weight:800;color:var(--c);font-size:14px}
+  .tl-tag{font-size:11.5px;padding:2px 9px;border-radius:999px;color:#fff;background:var(--c);font-weight:700}
+  .tl-card h3{font-size:16.5px;font-weight:750;margin-bottom:4px}
+  .tl-card p{font-size:13.8px;color:var(--muted)}
+  .tl-card a{color:var(--c);font-weight:700;font-size:13px}
+
+  /* education */
+  .edu-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    padding:28px;box-shadow:var(--shadow)}
+  .edu-card .school{font-size:22px;font-weight:800}
+  .edu-card .meta{color:var(--muted);font-size:14px;margin:4px 0 16px}
+  .edu-list{display:grid;gap:12px}
+  .edu-list li{list-style:none;display:flex;gap:11px;align-items:flex-start;font-size:14.5px}
+  .edu-list .mk{flex:0 0 auto;width:20px;height:20px;border-radius:6px;margin-top:2px;
+    background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);
+    display:grid;place-items:center;font-size:12px;font-weight:800}
+
+  /* projects */
+  .proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+  .proj{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;transition:.25s}
+  .proj:hover{transform:translateY(-4px);border-color:var(--accent)}
+  .proj .ph{padding:20px 20px 14px;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 12%,transparent),color-mix(in srgb,var(--accent2) 12%,transparent))}
+  .proj .ph .role{font-size:12px;color:var(--accent);font-weight:700}
+  .proj .ph h3{font-size:18px;font-weight:800;margin-top:3px}
+  .proj .ph .date{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .proj .pbody{padding:14px 20px 18px;flex:1;display:flex;flex-direction:column}
+  .proj .desc{font-size:13.8px;color:var(--muted);margin-bottom:12px}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .tag{font-size:11.5px;padding:3px 9px;border-radius:7px;background:var(--bg2);border:1px solid var(--border);color:var(--fg)}
+  .proj .toggle{cursor:pointer;font-size:13px;font-weight:700;color:var(--accent);align-self:flex-start;background:none;border:none;padding:0}
+  .proj .details{max-height:0;overflow:hidden;transition:max-height .4s ease;font-size:13.5px;color:var(--muted)}
+  .proj .details.open{max-height:420px;margin-top:10px}
+  .proj .details ul{margin:0;padding-left:18px}
+  .proj .details li{margin:5px 0}
+  .proj .links{display:flex;gap:10px;margin-top:12px}
+  .proj .links a{font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:9px;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;transition:.2s}
+  .proj .links a.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+
+  /* skills */
+  .skills-wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:26px;align-items:center}
+  .skills-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+  .chart-box{position:relative;height:340px}
+  .chart-box svg{display:block;width:100%;height:100%}
+  .rg{fill:none;stroke:var(--border);stroke-width:1}
+  .ra{stroke:var(--border);stroke-width:1}
+  .rd{fill:color-mix(in srgb,var(--accent) 24%,transparent);stroke:var(--accent);stroke-width:2.5;stroke-linejoin:round}
+  .rl{fill:var(--muted);font-size:13px;font-weight:700}
+  .skills-tags{display:flex;flex-wrap:wrap;gap:8px}
+  .skills-tags .tag{font-size:13px;padding:6px 12px;background:var(--bg2)}
+
+  /* awards */
+  .awards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .award{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--border);
+    border-radius:14px;padding:15px 16px;box-shadow:var(--shadow);font-size:14px;transition:.2s}
+  .award:hover{transform:translateY(-3px);border-color:var(--award)}
+  .award .ic{flex:0 0 auto;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
+    background:color-mix(in srgb,var(--award) 18%,transparent);color:var(--award);font-weight:900;font-size:15px}
+  .campus-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .campus-h{font-size:15px;font-weight:800;margin-bottom:14px;color:var(--accent)}
+  .campus-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px 15px;margin-bottom:12px;box-shadow:var(--shadow);border-left:3px solid var(--accent)}
+  .campus-item .yr{font-size:12px;color:var(--accent);font-weight:700}
+  .campus-item .ti{font-size:14.5px;font-weight:700;margin:3px 0 2px}
+  .campus-item .de{font-size:13px;color:var(--muted)}
+  @media(max-width:760px){.campus-grid{grid-template-columns:1fr}}
+
+  /* contact */
+  .contact{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:24px;
+    padding:42px 30px;text-align:center;box-shadow:var(--shadow)}
+  .contact h2{font-size:26px;font-weight:850;margin-bottom:8px}
+  .contact p{opacity:.92;font-size:14.5px;margin-bottom:22px}
+  .contact .row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+  .contact .row a{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;
+    background:rgba(255,255,255,.16);font-weight:700;font-size:14px;transition:.2s}
+  .contact .row a:hover{background:rgba(255,255,255,.28);transform:translateY(-2px)}
+  footer{text-align:center;color:var(--muted);font-size:12.5px;padding:30px 0 44px}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.show{opacity:1;transform:none}
+
+  @media(max-width:760px){
+    .nav-links a:not(.theme-btn){display:none}
+    .skills-wrap{grid-template-columns:1fr}
+    .hero{padding:60px 0 50px}
+  }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<nav>
+  <div class="wrap nav-inner">
+    <div class="brand">李冲<span>.</span>成就展</div>
+    <div class="nav-links">
+      <a href="#about">关于</a>
+      <a href="#timeline">时间轴</a>
+      <a href="#education">教育</a>
+      <a href="#campus">在校</a>
+      <a href="#projects">项目</a>
+      <a href="#skills">技能</a>
+      <a href="#awards">荣誉</a>
+      <a href="#contact">联系</a>
+      <button class="theme-btn" id="themeBtn" title="切换主题">◐</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="about">
+  <div class="wrap">
+    <div class="avatar reveal">李</div>
+    <h1 class="reveal">李冲</h1>
+    <div class="title reveal" id="heroTitle"></div>
+    <p class="tagline reveal" id="heroTag"></p>
+    <div class="chips reveal" id="heroChips"></div>
+  </div>
+</header>
+
+<!-- STATS -->
+<section id="stats">
+  <div class="wrap">
+    <div class="stats" id="statsGrid"></div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section id="timeline">
+  <div class="wrap">
+    <div class="sec-head reveal"><div class="bar"></div><div><h2>成长时间轴</h2><div class="en">My Journey · 2020 → 2027</div></div></div>
+    <div class="timeline" id="timelineList"></div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="wrap">
+    <div class="sec-head reveal"><div class="bar"></div><div><h2>教育背景</h2><div class="en">Education</div></div></div>
+    <div class="edu-card reveal" id="eduCard"></div>
+  </div>
+</section>
+
+<!-- CAMPUS -->
+<section id="campus">
+  <div class="wrap">
+    <div class="sec-head reveal"><div class="bar"></div><div><h2>在校经历</h2><div class="en">Campus Experience</div></div></div>
+    <div class="campus-grid">
+      <div class="campus-col reveal">
+        <h3 class="campus-h">学生工作 / 任职</h3>
+        <div id="campusRoles"></div>
+      </div>
+      <div class="campus-col reveal">
+        <h3 class="campus-h">活动与荣誉</h3>
+        <div id="campusActs"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="wrap">
+    <div class="sec-head reveal"><div class="bar"></div><div><h2>核心项目</h2><div class="en">Featured Projects</div></div></div>
+    <div class="proj-grid" id="projGrid"></div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="wrap">
+    <div class="sec-head reveal"><div class="bar"></div><div><h2>技能矩阵</h2><div class="en">Skills</div></div></div>
+    <div class="skills-wrap">
+      <div class="skills-card reveal"><div class="chart-box" id="radar"></div></div>
+      <div class="reveal">
+        <p style="color:var(--muted);font-size:14px;margin-bottom:16px">覆盖大模型应用、后端、前端、深度学习与科研的全栈能力栈。</p>
+        <div class="skills-tags" id="skillTags"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AWARDS -->
+<section id="awards">
+  <div class="wrap">
+    <div class="sec-head reveal"><div class="bar"></div><div><h2>荣誉奖项</h2><div class="en">Honors & Awards</div></div></div>
+    <div class="awards" id="awardsGrid"></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="wrap">
+    <div class="contact reveal">
+      <h2>一起聊聊 Agent 与 AI 应用</h2>
+      <p>欢迎基于项目经历交流，或发送实习 / 校招机会。</p>
+      <div class="row" id="contactRow"></div>
+    </div>
+    <footer>© 2020–2027 李冲 · 本硕七年成就展示 · 由真实简历数据驱动生成</footer>
+  </div>
+</section>
+
+<script>
+/* =================== 数据：改内容只改这里 =================== */
+const DATA = {
+  title: "Agent 应用开发 / AI 全栈工程师",
+  tagline: "西安邮电大学软件工程本硕连读七年，专注大模型应用、智能体与全栈开发。",
+  contacts: {
+    email: "chongli@stu.xupt.edu.cn",
+    phone: "15769285219",
+    github: "https://github.com/ChongLixupt",
+    blog: "https://blog.csdn.net/weixin_52326703?type=blog",
+    blogName: "CSDN · 西邮彭于晏",
+    wechat: "微信公众号 · 智能体研习社",
+    location: "西安 · 长安区",
+    school: "西安邮电大学 · 软件工程"
+  },
+  stats: [
+    { num: 7, suffix: "年", label: "本硕连读" },
+    { num: 4, suffix: "", label: "核心项目" },
+    { num: 3, suffix: "篇", label: "SCI论文(1见刊/2在投)" },
+    { num: 2, suffix: "项", label: "国家发明专利" },
+    { num: 9, suffix: "项", label: "荣誉奖项" },
+    { num: 77, suffix: "名", label: "培养发展对象" }
+  ],
+  timeline: [
+    { date: "2020.09", type: "edu", title: "考入西安邮电大学 · 软件工程（本科）", desc: "开启计算机与软件工程系统学习，奠定编程、算法与工程基础。" },
+    { date: "2023", type: "award", title: "优秀班干部", desc: "本科期间担任班干部，获评优秀班干部。" },
+    { date: "2024", type: "award", title: "二等奖学金 · “挑战杯”校二等奖", desc: "学业与科创双线并进，获学年二等奖学金及挑战杯校二等奖。" },
+    { date: "2024.09", type: "edu", title: "硕研入学 · 任党支部书记", desc: "继续攻读软件工程硕士；担任计研24级学生第一党支部书记兼年级负责人，累计培养发展对象 77 名。" },
+    { date: "2025.03", type: "proj", title: "AI 编程学习系统 v2.0 上线", desc: "基于 LLM 的智能编程教学平台，多智能体 + RAG + BKT 能力评估。", link: "https://huggingface.co/spaces/ChongLixupt/ai-program-learning" },
+    { date: "2025", type: "award", title: "二等奖学金 · 三下乡先进个人", desc: "再获二等奖学金；暑期“三下乡”社会实践获评先进个人。" },
+    { date: "2026", type: "proj", title: "扫码点餐系统 · SCI 论文系统 上线", desc: "React19 全栈点餐系统 + 智谱 GLM 助手；LangGraph 驱动的 SCI 论文生成与润色系统。", link: "https://ordering1-r6xt008gb-li521lis-projects.vercel.app/" },
+    { date: "2026.06", type: "intern", title: "大模型应用开发实习生 @ 西安星舟志屹", desc: "参与 AI+构网型光储一体化智能运维系统：LoRA 微调 Qwen2.5-7B、NL2SQL、RAG 知识库与 Neo4j 知识图谱。" },
+    { date: "2026", type: "research", title: "SCI 一区论文(学生一作) · 发明专利授权", desc: "发表中科院一区论文 1 篇（学生一作，已见刊），另有 2 篇在投；国家发明专利 2 项获授权：《基于多任务动态膜结构的计算任务卸载》《面向异构边缘计算的个性化联邦双膜约束多目标优化方法》。" },
+    { date: "2027.06", type: "edu", title: "硕士毕业（预计）", desc: "完成本硕连读七年学业，迈向 Agent 应用开发新征程。" }
+  ],
+  education: {
+    school: "西安邮电大学",
+    major: "软件工程（本硕连读）",
+    period: "2020.09 – 2027.06",
+    highlights: [
+      "校级创新基金立项：《基于强化学习与图神经网络驱动的无人机集群协同决策研究》",
+      "院级科技立项：《基于张量网络与深度强化学习的边缘计算资源多目标协同优化》",
+      "发表 SCI / 中科院一区论文 1 篇（学生一作，已见刊），另有 2 篇在投",
+      "获国家发明专利 2 项《基于多任务动态膜结构的计算任务卸载》《面向异构边缘计算的个性化联邦双膜约束多目标优化方法》（均已授权）",
+      "连续获 2024、2025 学年二等奖学金"
+    ]
+  },
+  projects: [
+    { name: "AI 编程学习系统 v2.0", role: "全栈开发", date: "2025.03",
+      desc: "基于大语言模型的智能编程学习助手，构建“引导式学习 + 能力评估 + 个性化反馈”三位一体教学平台。",
+      points: ["多智能体协作（责任链模式）：问答 / 代码审查 / 学习推荐 Agent", "RAG 引擎（ChromaDB）语义检索与上下文增强问答", "BKT 贝叶斯知识追踪量化掌握度，生成学习者画像", "多 LLM 适配器（策略模式）：智谱 / DeepSeek / 通义 / OpenAI", "LangGraph 智能体工作流，状态管理与条件分支"],
+      tags: ["Python", "LangChain", "LangGraph", "FastAPI", "Gradio", "ChromaDB", "Pydantic", "pytest"],
+      link: "https://huggingface.co/spaces/ChongLixupt/ai-program-learning" },
+    { name: "SCI 论文智能生成与润色系统", role: "个人项目", date: "2026",
+      desc: "基于 LLM + LangGraph 的全栈 Web 应用，输入标题与创新点即可检索真实文献并分章节生成符合 SCI 标准的论文。",
+      points: ["多 Agent 协作工作流（LangGraph 状态机）", "Prompt 工程：强制引用检索到的真实文献，从根源抑制幻觉", "RAG 对接 Semantic Scholar API 获取真实学术文献"],
+      tags: ["LangGraph", "LangChain", "LiteLLM", "Prompt Engineering", "RAG", "FastAPI"],
+      link: "https://huggingface.co/spaces/ChongLixupt/sci-paper-generator" },
+    { name: "智能扫码点餐管理系统", role: "个人项目", date: "2026",
+      desc: "React 19 + TypeScript + Vite 全栈点餐系统，集成智谱 GLM 实现 AI 智能点餐助手。",
+      points: ["顾客扫码点餐 + 管理员后台，完整 CRUD", "AI 智能点餐助手：自然语言点餐、推荐与管理", "TailwindCSS3 + shadcn/ui 响应式 UI，适配移动 / 桌面", "数据可视化：营收趋势、热门菜品分析"],
+      tags: ["React 19", "TypeScript", "Vite", "TailwindCSS", "shadcn/ui", "智谱 GLM"],
+      link: "https://ordering1-r6xt008gb-li521lis-projects.vercel.app/" },
+    { name: "AI+构网型光储一体化智能运维系统", role: "大模型应用开发实习生", date: "2026.06",
+      desc: "面向青海海南州 499.82MW 光储基地，构建“大模型 + 领域小模型”协同的智能运维系统。",
+      points: ["LoRA 微调 Qwen2.5-7B，NL2SQL 简单查询准确率 95% / 90%", "MinerU + LangChain 多源知识流水线；pgvector + Neo4j 四级知识图谱", "LangGraph 智能体编排：问题理解 → Schema检索 → SQL生成 → 校验 → 可视化", "运行分析报告自动生成（日报 / 周报 / 月报）"],
+      tags: ["LangGraph", "LangChain", "RAG", "Neo4j", "pgvector", "NL2SQL", "Vue3", "ECharts", "LoRA", "PostgreSQL"],
+      link: "" }
+  ],
+  skills: {
+    radar: { labels: ["大模型/Agent", "后端开发", "前端开发", "深度学习", "工程化/数据库", "科研/论文"], values: [92, 80, 75, 70, 78, 85] },
+    tags: ["LangChain", "LangGraph", "RAG", "FastAPI", "SpringBoot", "React", "Vue3", "TypeScript", "PyTorch", "Transformer", "MySQL", "Redis", "ChromaDB", "Neo4j", "Prompt Engineering", "LoRA"]
+  },
+  awards: [
+    "中国研究生数学建模竞赛 全国三等奖",
+    "2024 / 2025 学年 二等奖学金",
+    "2024 / 2025 学年“挑战杯”校二等奖",
+    "2025 大学生暑期“三下乡”社会实践 先进个人",
+    "2026 学年 校级优秀党员",
+    "2023 优秀班干部",
+    "2022 / 2023 学年 校三等奖学金",
+    "2021 / 2022 学年 优秀团员",
+    "普通话二级甲等证书",
+    "CET-4",
+    "机动车驾驶证"
+  ],
+  campus: {
+    roles: [
+      { year: "2024 – 2025", title: "计研24级第一党支部书记 兼 辅导员助理", desc: "统筹支部党建与年级事务，累计培养发展对象 77 名。" },
+      { year: "2023 – 2024", title: "本科安美公寓软件学生党支部书记", desc: "负责本科生党支部日常管理与党员发展全流程。" },
+      { year: "2021 – 2022", title: "软件2104班学生班助", desc: "协助班主任管理班级，引导新生适应大学生活。" },
+      { year: "2021 – 2022", title: "第十九号学生公寓党员工作站 宣传部部长", desc: "负责党建宣传与活动推文策划。" }
+    ],
+    activities: [
+      { year: "2022 – 2023", title: "校三等奖学金", desc: "学业表现获评校三等奖学金。" },
+      { year: "2021 – 2022", title: "优秀团员", desc: "共青团表现突出，获评优秀团员。" },
+      { year: "2020 – 2021", title: "“请回答 2020”元旦晚会文艺演出 三等奖", desc: "参与学院元旦晚会演出并获奖。" },
+      { year: "2020 – 2021", title: "“团支部风采大赛”二等奖", desc: "代表支部参赛获二等奖。" }
+    ]
+  }
+};
+
+const TYPE_META = {
+  edu:     { label: "教育", color: "var(--edu)" },
+  proj:    { label: "项目", color: "var(--proj)" },
+  award:   { label: "荣誉", color: "var(--award)" },
+  intern:  { label: "实习", color: "var(--intern)" },
+  research:{ label: "科研", color: "var(--research)" }
+};
+
+/* =================== 渲染 =================== */
+const $ = (s, p=document) => p.querySelector(s);
+const el = (tag, cls, html) => { const e=document.createElement(tag); if(cls)e.className=cls; if(html!=null)e.innerHTML=html; return e; };
+
+document.title = DATA.contacts ? "李冲 · 本硕七年成就展示" : document.title;
+$("#heroTitle").textContent = DATA.title;
+$("#heroTag").textContent = DATA.tagline;
+
+// hero chips
+const chipIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z" opacity="0"/></svg>';
+const chips = [
+  { t: DATA.contacts.email, href: "mailto:" + DATA.contacts.email },
+  { t: DATA.contacts.phone, href: "tel:" + DATA.contacts.phone },
+  { t: DATA.contacts.school, href: "#education" },
+  { t: "GitHub", href: DATA.contacts.github },
+  { t: DATA.contacts.blogName, href: DATA.contacts.blog },
+  { t: DATA.contacts.wechat, href: "#contact" }
+];
+chips.forEach(c => { const a = el("a","chip", c.t); a.href = c.href; $("#heroChips").appendChild(a); });
+
+// stats
+const statsGrid = $("#statsGrid");
+DATA.stats.forEach(s => {
+  const card = el("div","stat reveal");   // 加上 reveal，让 IntersectionObserver 能观察到
+  const num = el("div","num","0" + (s.suffix||""));
+  num.dataset.target = s.num; num.dataset.suffix = s.suffix||"";
+  card.appendChild(num);
+  card.appendChild(el("div","label", s.label));
+  statsGrid.appendChild(card);
+});
+
+// timeline
+const tl = $("#timelineList");
+DATA.timeline.forEach(it => {
+  const meta = TYPE_META[it.type] || TYPE_META.proj;
+  const item = el("div","tl-item");
+  item.style.setProperty("--c", meta.color);
+  item.innerHTML = `<div class="dot"></div>
+    <div class="tl-card">
+      <div class="tl-top"><span class="tl-date">${it.date}</span><span class="tl-tag">${meta.label}</span></div>
+      <h3>${it.title}</h3>
+      <p>${it.desc}${it.link ? ` <a href="${it.link}" target="_blank" rel="noopener">查看 ↗</a>` : ""}</p>
+    </div>`;
+  tl.appendChild(item);
+});
+
+// education
+const edu = DATA.education;
+$("#eduCard").innerHTML = `
+  <div class="school">${edu.school} · ${edu.major}</div>
+  <div class="meta">${edu.period}</div>
+  <ul class="edu-list">${edu.highlights.map(h=>`<li><span class="mk">✓</span><span>${h}</span></li>`).join("")}</ul>`;
+
+// campus
+const cr = $("#campusRoles"), ca = $("#campusActs");
+DATA.campus.roles.forEach(r=>{ cr.insertAdjacentHTML("beforeend", `<div class="campus-item"><div class="yr">${r.year}</div><div class="ti">${r.title}</div><div class="de">${r.desc}</div></div>`); });
+DATA.campus.activities.forEach(a=>{ ca.insertAdjacentHTML("beforeend", `<div class="campus-item"><div class="yr">${a.year}</div><div class="ti">${a.title}</div><div class="de">${a.de}</div></div>`); });
+
+// projects
+const pg = $("#projGrid");
+DATA.projects.forEach(p => {
+  const card = el("div","proj");
+  const links = p.link ? `<div class="links"><a href="${p.link}" target="_blank" rel="noopener">查看演示 ↗</a><a class="ghost" href="${p.link}" target="_blank" rel="noopener">源码</a></div>` : `<div class="links"><a class="ghost" href="#" onclick="return false">企业内部项目</a></div>`;
+  card.innerHTML = `
+    <div class="ph"><div class="role">${p.role}</div><h3>${p.name}</h3><div class="date">${p.date}</div></div>
+    <div class="pbody">
+      <div class="desc">${p.desc}</div>
+      <div class="tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+      <button class="toggle">展开核心贡献 ▾</button>
+      <div class="details"><ul>${p.points.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+      ${links}
+    </div>`;
+  const btn = $(".toggle", card), det = $(".details", card);
+  btn.onclick = () => { const open = det.classList.toggle("open"); btn.textContent = open ? "收起核心贡献 ▴" : "展开核心贡献 ▾"; };
+  pg.appendChild(card);
+});
+
+// skills tags
+$("#skillTags").innerHTML = DATA.skills.tags.map(t=>`<span class="tag">${t}</span>`).join("");
+
+// awards
+$("#awardsGrid").innerHTML = DATA.awards.map(a=>`<div class="award"><span class="ic">★</span><span>${a}</span></div>`).join("");
+
+// contact
+const c = DATA.contacts;
+$("#contactRow").innerHTML = `
+  <a href="mailto:${c.email}">✉ ${c.email}</a>
+  <a href="tel:${c.phone}">☎ ${c.phone}</a>
+  <a href="${c.github}" target="_blank" rel="noopener">GitHub ↗</a>
+  <a href="${c.blog}" target="_blank" rel="noopener">${c.blogName} ↗</a>
+  <a href="#contact">${c.wechat}</a>
+  <a href="#about">📍 ${c.location}</a>`;
+
+/* =================== 交互 =================== */
+// reveal + count-up
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add("show");
+      e.target.querySelectorAll && e.target.querySelectorAll(".num[data-target]").forEach(countUp);
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold:.15 });
+document.querySelectorAll(".reveal, .tl-item").forEach(n=>io.observe(n));
+
+function countUp(node){
+  const target = +node.dataset.target, suffix = node.dataset.suffix || "";
+  // 同一行内多张卡片错开几十毫秒，视觉更顺
+  const delay = +(node.dataset.delay || 0);
+  const dur = 1400, start = performance.now() + delay;
+  function step(now){
+    const p = Math.max(0, Math.min((now-start)/dur, 1));
+    const val = Math.floor((1 - Math.pow(1-p,3)) * target);
+    node.textContent = val + suffix;
+    if(p<1) requestAnimationFrame(step); else node.textContent = target + suffix;
+  }
+  if(delay>0) setTimeout(()=>requestAnimationFrame(step), delay);
+  else requestAnimationFrame(step);
+}
+
+// progress bar + scroll spy
+const progress = $("#progress");
+const navLinks = [...document.querySelectorAll(".nav-links a[href^='#']")];
+const sections = navLinks.map(a => document.querySelector(a.getAttribute("href"))).filter(Boolean);
+function onScroll(){
+  const h = document.documentElement;
+  const sc = h.scrollTop / (h.scrollHeight - h.clientHeight);
+  progress.style.width = (sc*100) + "%";
+  let cur = sections[0];
+  sections.forEach(s=>{ if(s.getBoundingClientRect().top <= 120) cur = s; });
+  navLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href") === "#"+cur.id));
+}
+window.addEventListener("scroll", onScroll, { passive:true });
+onScroll();
+
+// timeline active highlight
+const tlIo = new IntersectionObserver((es)=>{
+  es.forEach(e=>{ if(e.isIntersecting) e.target.classList.add("active"); });
+}, { threshold:.6 });
+document.querySelectorAll(".tl-item").forEach(n=>tlIo.observe(n));
+
+// theme toggle
+const root = document.documentElement;
+const saved = localStorage.getItem("theme");
+if(saved) root.setAttribute("data-theme", saved);
+$("#themeBtn").onclick = ()=>{
+  const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+  root.setAttribute("data-theme", next);
+  localStorage.setItem("theme", next);
+  // SVG 雷达图自动跟随主题（颜色用 CSS 变量），无需重绘
+};
+
+// radar chart —— 原生 SVG 绘制，无外部依赖，主题自动跟随 CSS 变量
+function renderRadar(){
+  const box = $("#radar");
+  if(!box) return;
+  const { labels, values } = DATA.skills.radar;
+  const N = labels.length;
+  const cx = 200, cy = 200, R = 118, LABEL_R = 142;
+  const ang = i => (-90 + i * 360 / N) * Math.PI / 180;
+  const P = (i, r) => [ +(cx + r * Math.cos(ang(i))).toFixed(1), +(cy + r * Math.sin(ang(i))).toFixed(1) ];
+  // 网格圈
+  let grid = "";
+  [0.25, 0.5, 0.75, 1].forEach(f => {
+    const pts = labels.map((_, i) => P(i, R * f).join(",")).join(" ");
+    grid += `<polygon points="${pts}" class="rg"/>`;
+  });
+  // 轴线
+  let axes = "";
+  labels.forEach((_, i) => { const [x, y] = P(i, R); axes += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" class="ra"/>`; });
+  // 数据多边形
+  const dp = values.map((v, i) => P(i, R * v / 100).join(",")).join(" ");
+  // 轴标签
+  let txt = "";
+  labels.forEach((lb, i) => {
+    const [x, y] = P(i, LABEL_R);
+    const anchor = Math.abs(x - cx) < 6 ? "middle" : (x < cx ? "end" : "start");
+    txt += `<text x="${x}" y="${y}" class="rl" text-anchor="${anchor}" dominant-baseline="middle">${lb}</text>`;
+  });
+  box.innerHTML = `<svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet" role="img" aria-label="技能雷达图">
+    ${grid}${axes}<polygon points="${dp}" class="rd"/>${txt}
+  </svg>`;
+}
+renderRadar();
+</script>
+</body>
+</html>
