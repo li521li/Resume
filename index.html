@@ -117,9 +117,12 @@
 
   /* projects */
   .proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
-  .proj{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  .proj{position:relative;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
     box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;transition:.25s}
   .proj:hover{transform:translateY(-4px);border-color:var(--accent)}
+  .proj .intern-badge{position:absolute;top:0;right:0;z-index:2;background:linear-gradient(135deg,#ff8a3d,#ff4d4f);
+    color:#fff;font-size:11px;font-weight:800;padding:5px 13px;border-bottom-left-radius:13px;
+    box-shadow:0 3px 10px rgba(255,77,79,.35);letter-spacing:.4px;pointer-events:none;white-space:nowrap}
   .proj .ph{padding:20px 20px 14px;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 12%,transparent),color-mix(in srgb,var(--accent2) 12%,transparent))}
   .proj .ph .role{font-size:12px;color:var(--accent);font-weight:700}
   .proj .ph h3{font-size:18px;font-weight:800;margin-top:3px}
@@ -295,7 +298,7 @@
       <p>欢迎基于项目经历交流，或发送实习 / 校招机会。</p>
       <div class="row" id="contactRow"></div>
     </div>
-    <footer>© 2020–2027 李冲 · 本硕七年成就展示 </footer>
+    <footer>© 2020–2027 李冲 · 本硕七年成就展示 · 由真实简历数据驱动生成</footer>
   </div>
 </section>
 
@@ -470,9 +473,11 @@ DATA.campus.activities.forEach(a=>{ ca.insertAdjacentHTML("beforeend", `<div cla
 // projects
 const pg = $("#projGrid");
 DATA.projects.forEach(p => {
-  const card = el("div","proj");
+  const isIntern = /实习/.test(p.role);
+  const card = el("div","proj" + (isIntern ? " intern" : ""));
   const links = p.link ? `<div class="links"><a href="${p.link}" target="_blank" rel="noopener">查看演示 ↗</a><a class="ghost" href="${p.link}" target="_blank" rel="noopener">源码</a></div>` : `<div class="links"><a class="ghost" href="#" onclick="return false">企业内部项目</a></div>`;
   card.innerHTML = `
+    ${isIntern ? '<span class="intern-badge">实习 · 西安星舟志屹</span>' : ''}
     <div class="ph"><div class="role">${p.role}</div><h3>${p.name}</h3><div class="date">${p.date}</div></div>
     <div class="pbody">
       <div class="desc">${p.desc}</div>
