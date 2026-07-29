@@ -194,10 +194,10 @@
     <div class="brand">李冲<span>.</span>成就展</div>
     <div class="nav-links">
       <a href="#about">关于</a>
+      <a href="#projects">项目</a>
       <a href="#timeline">时间轴</a>
       <a href="#education">教育</a>
       <a href="#campus">在校</a>
-      <a href="#projects">项目</a>
       <a href="#skills">技能</a>
       <a href="#awards">荣誉</a>
       <a href="#contact">联系</a>
@@ -221,6 +221,14 @@
 <section id="stats">
   <div class="wrap">
     <div class="stats" id="statsGrid"></div>
+  </div>
+</section>
+
+<!-- PROJECTS（提前到最前面） -->
+<section id="projects">
+  <div class="wrap">
+    <div class="sec-head reveal"><div class="bar"></div><div><h2>核心项目</h2><div class="en">Featured Projects</div></div></div>
+    <div class="proj-grid" id="projGrid"></div>
   </div>
 </section>
 
@@ -254,14 +262,6 @@
         <div id="campusActs"></div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- PROJECTS -->
-<section id="projects">
-  <div class="wrap">
-    <div class="sec-head reveal"><div class="bar"></div><div><h2>核心项目</h2><div class="en">Featured Projects</div></div></div>
-    <div class="proj-grid" id="projGrid"></div>
   </div>
 </section>
 
@@ -347,6 +347,11 @@ const DATA = {
     ]
   },
   projects: [
+    { name: "AI+构网型光储一体化智能运维系统", role: "大模型应用开发实习生", date: "2026.06",
+      desc: "面向青海海南州 499.82MW 光储基地，构建“大模型 + 领域小模型”协同的智能运维系统。",
+      points: ["LoRA 微调 Qwen2.5-7B，NL2SQL 简单查询准确率 95% / 90%", "MinerU + LangChain 多源知识流水线；pgvector + Neo4j 四级知识图谱", "LangGraph 智能体编排：问题理解 → Schema检索 → SQL生成 → 校验 → 可视化", "运行分析报告自动生成（日报 / 周报 / 月报）"],
+      tags: ["LangGraph", "LangChain", "RAG", "Neo4j", "pgvector", "NL2SQL", "Vue3", "ECharts", "LoRA", "PostgreSQL"],
+      link: "" },
     { name: "AI 编程学习系统 v2.0", role: "全栈开发", date: "2025.03",
       desc: "基于大语言模型的智能编程学习助手，构建“引导式学习 + 能力评估 + 个性化反馈”三位一体教学平台。",
       points: ["多智能体协作（责任链模式）：问答 / 代码审查 / 学习推荐 Agent", "RAG 引擎（ChromaDB）语义检索与上下文增强问答", "BKT 贝叶斯知识追踪量化掌握度，生成学习者画像", "多 LLM 适配器（策略模式）：智谱 / DeepSeek / 通义 / OpenAI", "LangGraph 智能体工作流，状态管理与条件分支"],
@@ -361,12 +366,7 @@ const DATA = {
       desc: "React 19 + TypeScript + Vite 全栈点餐系统，集成智谱 GLM 实现 AI 智能点餐助手。",
       points: ["顾客扫码点餐 + 管理员后台，完整 CRUD", "AI 智能点餐助手：自然语言点餐、推荐与管理", "TailwindCSS3 + shadcn/ui 响应式 UI，适配移动 / 桌面", "数据可视化：营收趋势、热门菜品分析"],
       tags: ["React 19", "TypeScript", "Vite", "TailwindCSS", "shadcn/ui", "智谱 GLM"],
-      link: "https://ordering1-r6xt008gb-li521lis-projects.vercel.app/" },
-    { name: "AI+构网型光储一体化智能运维系统", role: "大模型应用开发实习生", date: "2026.06",
-      desc: "面向青海海南州 499.82MW 光储基地，构建“大模型 + 领域小模型”协同的智能运维系统。",
-      points: ["LoRA 微调 Qwen2.5-7B，NL2SQL 简单查询准确率 95% / 90%", "MinerU + LangChain 多源知识流水线；pgvector + Neo4j 四级知识图谱", "LangGraph 智能体编排：问题理解 → Schema检索 → SQL生成 → 校验 → 可视化", "运行分析报告自动生成（日报 / 周报 / 月报）"],
-      tags: ["LangGraph", "LangChain", "RAG", "Neo4j", "pgvector", "NL2SQL", "Vue3", "ECharts", "LoRA", "PostgreSQL"],
-      link: "" }
+      link: "https://ordering1-r6xt008gb-li521lis-projects.vercel.app/" }
   ],
   skills: {
     radar: { labels: ["大模型/Agent", "后端开发", "前端开发", "深度学习", "工程化/数据库", "科研/论文"], values: [92, 80, 75, 70, 78, 85] },
