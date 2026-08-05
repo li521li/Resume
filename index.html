@@ -187,16 +187,56 @@
     .skills-wrap{grid-template-columns:1fr}
     .hero{padding:60px 0 50px}
   }
+
+  /* ===== 证书轮播图 ===== */
+  .carousel{max-width:780px;margin:0 auto}
+  .carousel .viewport{position:relative;overflow:hidden;border-radius:var(--radius);
+    border:1px solid var(--border);box-shadow:var(--shadow);background:var(--card)}
+  .carousel .track{display:flex;transition:transform .55s cubic-bezier(.22,.61,.36,1)}
+  .carousel .slide{min-width:100%;display:flex;flex-direction:column}
+  .carousel .slide .img-box{background:#fff;display:grid;place-items:center;cursor:zoom-in;padding:14px}
+  .carousel .slide img{max-width:100%;max-height:480px;object-fit:contain;display:block;
+    border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.12)}
+  .carousel .cap{padding:14px 18px;text-align:center;font-size:14.5px;font-weight:600;color:var(--muted);
+    border-top:1px solid var(--border)}
+  .carousel .nav-btn{position:absolute;top:calc(50% - 26px);transform:translateY(-50%);z-index:3;
+    width:44px;height:44px;border-radius:50%;border:1px solid var(--border);
+    background:color-mix(in srgb,var(--card) 88%,transparent);color:var(--fg);
+    font-size:20px;cursor:pointer;display:grid;place-items:center;box-shadow:var(--shadow);transition:.2s}
+  .carousel .nav-btn:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-50%) scale(1.06)}
+  .carousel .nav-btn.prev{left:12px}
+  .carousel .nav-btn.next{right:12px}
+  .carousel .dots{display:flex;gap:9px;justify-content:center;margin-top:18px}
+  .carousel .dot{width:10px;height:10px;border-radius:50%;border:none;cursor:pointer;
+    background:var(--border);transition:.25s;padding:0}
+  .carousel .dot.active{background:var(--accent);width:26px;border-radius:6px}
+  .carousel .counter{text-align:center;color:var(--muted);font-size:13px;margin-top:10px}
+
+  /* lightbox */
+  .lightbox{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;
+    background:rgba(8,12,24,.86);backdrop-filter:blur(4px);cursor:zoom-out;padding:30px}
+  .lightbox.open{display:flex}
+  .lightbox img{max-width:92vw;max-height:88vh;object-fit:contain;border-radius:10px;
+    box-shadow:0 20px 60px rgba(0,0,0,.6)}
+  .lightbox .lb-close{position:absolute;top:18px;right:22px;color:#fff;font-size:30px;cursor:pointer;
+    background:none;border:none;line-height:1}
 </style>
 </head>
 <body>
 <div id="progress"></div>
+
+<!-- 证书灯箱 -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lbClose" aria-label="关闭">×</button>
+  <img id="lbImg" src="" alt="证书大图" />
+</div>
 
 <nav>
   <div class="wrap nav-inner">
     <div class="brand">李冲<span>.</span>成就展</div>
     <div class="nav-links">
       <a href="#about">关于</a>
+      <a href="#certificates">证书</a>
       <a href="#projects">项目</a>
       <a href="#timeline">时间轴</a>
       <a href="#education">教育</a>
@@ -219,6 +259,22 @@
     <div class="chips reveal" id="heroChips"></div>
   </div>
 </header>
+
+<!-- CERTIFICATES 轮播图 -->
+<section id="certificates">
+  <div class="wrap">
+    <div class="sec-head reveal"><div class="bar"></div><div><h2>荣誉证书</h2><div class="en">Certificates &amp; Awards</div></div></div>
+    <div class="carousel reveal" id="carousel">
+      <div class="viewport">
+        <div class="track" id="carTrack"></div>
+        <button class="nav-btn prev" id="carPrev" aria-label="上一张">‹</button>
+        <button class="nav-btn next" id="carNext" aria-label="下一张">›</button>
+      </div>
+      <div class="dots" id="carDots"></div>
+      <div class="counter" id="carCounter"></div>
+    </div>
+  </div>
+</section>
 
 <!-- STATS -->
 <section id="stats">
@@ -317,6 +373,24 @@ const DATA = {
     location: "西安 · 长安区",
     school: "西安邮电大学 · 软件工程"
   },
+  certificates: [
+    { src: "证书/论文.png", caption: "SCI 中科院一区论文发表（学生一作）" },
+    { src: "证书/数模证书.png", caption: "全国大学生数学建模竞赛 · 全国三等奖" },
+    { src: "证书/数模校赛证书.jpg", caption: "全国大学生数学建模竞赛 · 校赛奖" },
+    { src: "证书/挑战杯校赛证书.jpg", caption: "“挑战杯”大学生课外学术科技作品竞赛 · 校赛奖" },
+    { src: "证书/立项证书.jpg", caption: "校级创新基金立项证书" },
+    { src: "证书/2024年奖学金证书.jpg", caption: "2024 学年研究生二等奖学金" },
+    { src: "证书/2025年二等奖学金证书.jpg", caption: "2025 学年研究生二等奖学金" },
+    { src: "证书/三等奖学金证书.jpg", caption: "本科校三等奖学金" },
+    { src: "证书/三下乡优秀个人证书.jpg", caption: "暑期“三下乡”社会实践 · 先进个人" },
+    { src: "证书/2022年优秀团员证书.png", caption: "2022 年优秀共青团员" },
+    { src: "证书/2023年优秀班干部.jpg", caption: "2023 年优秀班干部" },
+    { src: "证书/2024年优秀团干部.jpg", caption: "2024 年优秀共青团干部" },
+    { src: "证书/优秀团干部证书.jpg", caption: "优秀共青团干部" },
+    { src: "证书/优秀党员证书.jpg", caption: "校级优秀共产党员" },
+    { src: "证书/宣传部部长聘书.jpg", caption: "党员工作站宣传部部长聘书" },
+    { src: "证书/中科创达暑期培训证书.jpg", caption: "中科创达暑期实训培训证书" }
+  ],
   stats: [
     { num: 7, suffix: "年", label: "本硕连读" },
     { num: 4, suffix: "", label: "核心项目" },
@@ -431,6 +505,60 @@ const chips = [
   { t: DATA.contacts.wechat, href: "#contact" }
 ];
 chips.forEach(c => { const a = el("a","chip", c.t); a.href = c.href; $("#heroChips").appendChild(a); });
+
+// ===== 证书轮播图 =====
+const certs = DATA.certificates || [];
+if (certs.length) {
+  const track = $("#carTrack"), dots = $("#carDots"), counter = $("#carCounter");
+  let cur = 0, timer = null;
+  certs.forEach((c, i) => {
+    const slide = el("div","slide");
+    const box = el("div","img-box");
+    const img = document.createElement("img");
+    img.src = c.src; img.alt = c.caption || ("证书 " + (i + 1)); img.loading = "eager";
+    img.addEventListener("click", () => openLightbox(c.src));
+    box.appendChild(img);
+    slide.appendChild(box);
+    slide.appendChild(el("div","cap", c.caption || ""));
+    track.appendChild(slide);
+    const d = document.createElement("button");
+    d.className = "dot" + (i === 0 ? " active" : "");
+    d.setAttribute("aria-label", "第 " + (i + 1) + " 张");
+    d.addEventListener("click", () => go(i, true));
+    dots.appendChild(d);
+  });
+  function render() {
+    track.style.transform = "translateX(-" + (cur * 100) + "%)";
+    [...dots.children].forEach((d, i) => d.classList.toggle("active", i === cur));
+    counter.textContent = (cur + 1) + " / " + certs.length;
+  }
+  function go(i, manual) {
+    cur = (i + certs.length) % certs.length;
+    render();
+    if (manual) restart();
+  }
+  function next() { go(cur + 1); }
+  function prev() { go(cur - 1); }
+  function start() { if (certs.length > 1) timer = setInterval(next, 4000); }
+  function stop() { if (timer) { clearInterval(timer); timer = null; } }
+  function restart() { stop(); start(); }
+  $("#carNext").addEventListener("click", () => go(cur + 1, true));
+  $("#carPrev").addEventListener("click", () => go(cur - 1, true));
+  const carouselEl = $("#carousel");
+  carouselEl.addEventListener("mouseenter", stop);
+  carouselEl.addEventListener("mouseleave", start);
+  // 页面隐藏时暂停，避免后台空跑
+  document.addEventListener("visibilitychange", () => document.hidden ? stop() : start());
+  render(); start();
+}
+
+// 证书灯箱
+const lb = $("#lightbox"), lbImg = $("#lbImg");
+function openLightbox(src) { lbImg.src = src; lb.classList.add("open"); }
+function closeLightbox() { lb.classList.remove("open"); lbImg.src = ""; }
+$("#lbClose").addEventListener("click", e => { e.stopPropagation(); closeLightbox(); });
+lb.addEventListener("click", e => { if (e.target === lb) closeLightbox(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeLightbox(); });
 
 // stats
 const statsGrid = $("#statsGrid");
